@@ -1,0 +1,20 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- 创建主屏幕GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PowerLegendsBlankUI"
+screenGui.ResetOnSpawn = false
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+-创建主屏幕 GUI
+本地screenGui=Instance. new（“screenGui”）
+screenGui.Name = "PowerLegendsBlankUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+-- 主背景框架
+local mainFrame = Instance.new("Frame")
+local player = Players.LocalPlayer
