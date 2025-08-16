@@ -79,7 +79,7 @@ function YtPr()
 	TextLabel.Position = UDim2.new(0.401250005, 0, 0.169999987, 0)
 	TextLabel.Size = UDim2.new(0.534722269, 0, 0.310000002, 0)
 	TextLabel.Font = Enum.Font.Highway
-	TextLabel.Text = "安脚本作者ato"
+	TextLabel.Text = "牛脚本作者cop57835"
 	TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 	TextLabel.TextScaled = true
 	TextLabel.TextSize = 14.000
@@ -625,8 +625,8 @@ elseif not getgenv().Key and list[game.GameId] ~= nil then
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{
                 Title = "错误：没有此游戏脚本";
-                Text ="安脚本暂时没有此游戏脚本，你可以加q群来许愿游戏脚本，qq群号已自动复制到您的粘贴板里";
+                Text ="牛脚本暂时没有此游戏脚本，你可以加q群来许愿游戏脚本，qq群号已自动复制到您的粘贴板里";
                 Duration = 5;
             })
-	setclipboard("984571833")
+	setclipboard("104322062")
 end
