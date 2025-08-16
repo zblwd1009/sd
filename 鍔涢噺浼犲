@@ -1,0 +1,231 @@
+-- 力量传奇脚本
+-- 作者: 力量传奇一只牛🐂
+-- 版本: 1.0
+
+-- 服务引用
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+
+-- 创建远程事件
+local PowerEvents = Instance.new("Folder")
+PowerEvents.Name = "PowerEvents"
+PowerEvents.Parent = ReplicatedStorage
+
+local AddPowerEvent = Instance.new("RemoteEvent")
+AddPowerEvent.Name = "AddPower"
+AddPowerEvent.Parent = PowerEvents
+
+local UsePowerEvent = Instance.new("RemoteEvent")
+UsePowerEvent.Name = "UsePower"
+UsePowerEvent.Parent = PowerEvents
+
+-- 玩家数据模块
+local PlayerData = {}
+local function setupPlayerData(player)
+    PlayerData[player] = {
+        Strength = 1,    -- 力量
+        Speed = 1,       -- 速度
+        Energy = 1,      -- 能量
+        Level = 1,      -- 等级
+        XP = 0,         -- 经验值
+        PowerPoints = 0, -- 可分配点数
+        Powers = {}      -- 已解锁能力
+    }
+end
+
+-- 初始化玩家
+Players.PlayerAdded:Connect(function(player)
+    setupPlayerData(player)
+    
+    -- 创建玩家GUI
+    local leaderstats = Instance.new("Folder")
+    leaderstats.Name = "leaderstats"
+    leaderstats.Parent = player
+    
+    local level = Instance.new("IntValue")
+    level.Name = "Level"
+    level.Value = 1
+    level.Parent = leaderstats
+    
+    -- 发送初始数据给客户端
+    player:WaitForChild("PlayerGui")
+    local dataToSend = PlayerData[player]
+    AddPowerEvent:FireClient(player, dataToSend)
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    PlayerData[player] = nil
+end)
+
+-- 升级系统
+local function calculateXPToNextLevel(currentLevel)
+    return currentLevel * 100
+end
+
+local function levelUp(player)
+    local data = PlayerData[player]
+    data.Level += 1
+    data.PowerPoints += 3  -- 每升一级获得3个点数
+    player.leaderstats.Level.Value = data.Level
+    
+    -- 通知客户端
+    AddPowerEvent:FireClient(player, data)
+end
+
+local function addXP(player, amount)
+    local data = PlayerData[player]
+    data.XP += amount
+    
+    local xpNeeded = calculateXPToNextLevel(data.Level)
+    if data.XP >= xpNeeded then
+        data.XP -= xpNeeded
+        levelUp(player)
+    end
+end
+
+-- 力量系统
+local function addPower(player, powerType)
+    local data = PlayerData[player]
+    if data.PowerPoints <= 0 then return end
+    
+    if powerType == "Strength" then
+        data.Strength += 1
+    elseif powerType == "Speed" then
+        data.Speed += 1
+    elseif powerType == "Energy" then
+        data.Energy += 1
+    end
+    
+    data.PowerPoints -= 1
+    AddPowerEvent:FireClient(player, data)
+end
+
+-- 能力使用系统
+local powers = {
+    SuperPunch = {
+        Name = "Super Punch",
+        Description = "A powerful punch that deals extra damage",
+        Cost = 10,
+        Cooldown = 5,
+        Execute = function(player, target)
+            local humanoid = target:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                local damage = PlayerData[player].Strength * 10
+                humanoid:TakeDamage(damage)
+            end
+        end
+    },
+    SpeedDash = {
+        Name = "Speed Dash",
+        Description = "Quickly dash forward",
+        Cost = 5,
+        Cooldown = 3,
+        Execute = function(player)
+            local character = player.Character
+            if character then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    -- 实现冲刺逻辑
+                end
+            end
+        end
+    },
+    EnergyShield = {
+        Name = "Energy Shield",
+        Description = "Create a protective shield around you",
+        Cost = 15,
+        Cooldown = 10,
+        Execute = function(player)
+            -- 实现护盾逻辑
+        end
+    }
+}
+
+local cooldowns = {}
+local function usePower(player, powerName, target)
+    local power = powers[powerName]
+    if not power then return end
+    
+    local data = PlayerData[player]
+    if not data then return end
+    
+    -- 检查冷却
+    if cooldowns[player] and cooldowns[player][powerName] then
+        if os.time() - cooldowns[player][powerName] < power.Cooldown then
+            return
+        end
+    end
+    
+    -- 执行能力
+    power.Execute(player, target)
+    
+    -- 设置冷却
+    if not cooldowns[player] then
+        cooldowns[player] = {}
+    end
+    cooldowns[player][powerName] = os.time()
+end
+
+-- 远程事件处理
+AddPowerEvent.OnServerEvent:Connect(function(player, powerType)
+    addPower(player, powerType)
+end)
+
+UsePowerEvent.OnServerEvent:Connect(function(player, powerName, target)
+    usePower(player, powerName, target)
+end)
+
+-- 战斗系统示例
+local function onCharacterDamage(victim, damage, attacker)
+    if attacker and Players:GetPlayerFromCharacter(attacker) then
+        local player = Players:GetPlayerFromCharacter(attacker)
+        addXP(player, damage)  -- 根据造成的伤害获得经验
+    end
+end
+
+-- 连接伤害事件
+game:GetService("Players").PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local humanoid = character:WaitForChild("Humanoid")
+        humanoid.Died:Connect(function()
+            -- 角色死亡逻辑
+        end)
+    end)
+end)
+
+-- 示例NPC生成
+local function spawnTrainingDummy(position)
+    local dummy = Instance.new("Model")
+    dummy.Name = "TrainingDummy"
+    
+    local humanoid = Instance.new("Humanoid")
+    humanoid.MaxHealth = 100
+    humanoid.Health = 100
+    humanoid.Parent = dummy
+    
+    local head = Instance.new("Part")
+    head.Name = "Head"
+    head.Size = Vector3.new(2, 2, 2)
+    head.Position = position
+    head.Anchored = false
+    head.Parent = dummy
+    
+    -- 其他身体部位...
+    
+    dummy.PrimaryPart = head
+    dummy.Parent = workspace
+    
+    -- 连接伤害事件
+    humanoid.Died:Connect(function()
+        wait(5)
+        humanoid.Health = humanoid.MaxHealth
+    end)
+    
+    return dummy
+end
+
+-- 生成一些训练假人
+spawnTrainingDummy(Vector3.new(0, 5, 0))
+spawnTrainingDummy(Vector3.new(5, 5, 5))
+spawnTrainingDummy(Vector3.new(-5, 5, 5))
