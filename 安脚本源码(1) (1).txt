@@ -79,7 +79,7 @@ function YtPr()
 	TextLabel.Position = UDim2.new(0.401250005, 0, 0.169999987, 0)
 	TextLabel.Size = UDim2.new(0.534722269, 0, 0.310000002, 0)
 	TextLabel.Font = Enum.Font.Highway
-	TextLabel.Text = "安脚本作者ato"
+	TextLabel.Text = "牛🐂脚本"
 	TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 	TextLabel.TextScaled = true
 	TextLabel.TextSize = 14.000
@@ -92,7 +92,7 @@ function YtPr()
 	TextButton.Position = UDim2.new(0.401250005, 0, 0.479999989, 0)
 	TextButton.Size = UDim2.new(0.534722269, 0, 0.349999994, 0)
 	TextButton.Font = Enum.Font.SourceSans
-	TextButton.Text = "关注作者b站号"
+	TextButton.Text = "关注作者抖音号"
 	TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TextButton.TextScaled = true
 	TextButton.TextSize = 14.000
@@ -461,7 +461,7 @@ function CreateSupportList(list_game)
 	Tittle.Position = UDim2.new(0.0399999991, 0, 0, 0)
 	Tittle.Size = UDim2.new(0, 265, 0, 39)
 	Tittle.Font = Enum.Font.Highway
-	Tittle.Text = "安脚本支持的游戏(ui作者为hoho)"
+	Tittle.Text = "牛🐂脚本支持的游戏(ui作者为牛)"
 	Tittle.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Tittle.TextScaled = true
 	Tittle.TextSize = 14.000
@@ -505,7 +505,7 @@ function CreateSupportList(list_game)
 		TextLabel.BackgroundTransparency = 1.000
 		TextLabel.Size = UDim2.new(0, 353, 0, 24)
 		TextLabel.Font = Enum.Font.Highway
-		TextLabel.Text = "		😎 " .. v
+		TextLabel.Text = "		🐂 " .. v
 		TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 		TextLabel.TextScaled = true
 		TextLabel.TextSize = 14.000
@@ -527,8 +527,9 @@ local list = {
 	--力量传奇
 	[1268927906] = "loadstring(game:HttpGet(('https://raw.githubusercontent.com/wucan114514/gegeyxjb/main/musclelegend')))()",	
 	
-	--超级大力士模拟器
-	[2564505263] = "loadstring(game:HttpGet(('https://raw.githubusercontent.com/wucan114514/gegeyxjb/main/dalishi')))()",	
+	--力量传奇2
+	[1268927906] = 	"loadstring(game:HttpGet('https://raw.github.com/114514541883484/Zephyr-wave/main/Legend of Strength.lua"))()"
+
 	
 	--忍者传奇
 	[1335695570] = "loadstring(game:HttpGet(('https://raw.githubusercontent.com/wucan114514/gegeyxjb/main/ninjalegend')))()",
@@ -577,7 +578,7 @@ local name = {
 
 	[1268927906] = "力量传奇",
 
-	[2564505263] = "超级大力士模拟器",
+	[1268927906] = "力量传奇2",
 
 	[1335695570] = "忍者传奇",
 
@@ -625,8 +626,8 @@ elseif not getgenv().Key and list[game.GameId] ~= nil then
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{
                 Title = "错误：没有此游戏脚本";
-                Text ="安脚本暂时没有此游戏脚本，你可以加q群来许愿游戏脚本，qq群号已自动复制到您的粘贴板里";
+                Text ="牛🐂脚本暂时没有此游戏脚本，你可以加q群来许愿游戏脚本，qq群号已自动复制到您的粘贴板里";
                 Duration = 5;
             })
-	setclipboard("984571833")
+	setclipboard("1018757951")
 end
